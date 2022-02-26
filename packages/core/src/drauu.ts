@@ -109,7 +109,7 @@ export class Drauu {
 
   undo() {
     const el = this.el!
-    if (!el.lastElementChild)
+    if (!el.lastElementChild || el.lastElementChild.id) // Also skip if the last element has been erased/hidden.
       return false
     this._undoStack.push(el.lastElementChild.cloneNode(true))
     el.lastElementChild.remove()
@@ -122,7 +122,7 @@ export class Drauu {
       return false
 
     /*
-    Having added the Eraser, 2 kinds of elements can be on undo-stack:
+    Having added the Eraser, 2 kinds of elements can be on the undo-stack:
     1) Last-added elements that have been 'undone'.
     2) Clones of 'erased' elements, which really have been hidden and that can be refound using the clone.
     */
@@ -151,7 +151,7 @@ export class Drauu {
   }
 
   canUndo() {
-    return !!this.el?.lastElementChild
+    return !!this.el?.lastElementChild && !this.el.lastElementChild.id  // Skip when the last element has been erased/hidden.
   }
 
   private eventMove(event: PointerEvent) {
