@@ -1,6 +1,6 @@
 import type { StrokeOptions } from 'perfect-freehand'
 
-export type DrawingMode = 'draw' | 'stylus' | 'line' | 'rectangle' | 'ellipse'
+export type DrawingMode = 'draw' | 'stylus' | 'line' | 'rectangle' | 'ellipse' | 'eraser'
 
 export interface Brush {
   /**

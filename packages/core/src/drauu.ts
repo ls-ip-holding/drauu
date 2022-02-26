@@ -13,7 +13,7 @@ export class Drauu {
   private _emitter = createNanoEvents<EventsMap>()
   private _models = createModels(this)
   private _currentNode: SVGElement | undefined
-  private _undoStack: Node[] = []
+  public _undoStack: Node[] = []   // Public, because the Eraser needs access to the undo-stack!
   private _disposables: (() => void)[] = []
 
   constructor(public options: Options = {}) {
@@ -120,7 +120,28 @@ export class Drauu {
   redo() {
     if (!this._undoStack.length)
       return false
-    this.el!.appendChild(this._undoStack.pop()!)
+
+    /*
+    Having added the Eraser, 2 kinds of elements can be on undo-stack:
+    1) Last-added elements that have been 'undone'.
+    2) Clones of 'erased' elements, which really have been hidden and that can be refound using the clone.
+    */
+    const node = this._undoStack.pop()!
+    const elem = node as HTMLElement
+    if (elem && elem.id){
+      // 2) Only clones have an id, so:
+      const originalId = elem.id.replace('clone-', 'original-')
+      const original = document.getElementById(originalId) as HTMLElement
+      // Remove the hide-logic to make it a normal element again:
+      if (original){
+          original.id = ''
+          original.style.display = ''
+      }
+    }
+    else {
+      // 1) Old-style 'undone' elements:
+      this.el!.appendChild(node)
+    }
     this._emitter.emit('changed')
     return true
   }

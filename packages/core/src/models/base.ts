@@ -10,7 +10,7 @@ export abstract class BaseModel<T extends SVGElement> {
   start: Point = undefined!
   el: T | null = null
 
-  constructor(private drauu: Drauu) {}
+  constructor(protected drauu: Drauu) {}  // Protected, because the Eraser needs access to the undo-stack!
 
   onStart(point: Point): SVGElement | undefined {
     return undefined

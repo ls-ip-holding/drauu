@@ -41,6 +41,9 @@ window.addEventListener('keydown', (e) => {
   else if (e.code === 'KeyC')
     drauu.clear()
 
+  else if (e.code === 'KeyX')
+    drauu.mode = 'eraser'
+
   else if (e.code === 'Equal')
     drauu.brush.size = Math.min(10, drauu.brush.size + 0.5)
 
@@ -73,6 +76,7 @@ const modes: { el: HTMLElement; brush: Partial<Brush> }[] = [
   { el: document.getElementById('m-arrow')!, brush: { mode: 'line', arrowEnd: true } },
   { el: document.getElementById('m-rect')!, brush: { mode: 'rectangle', arrowEnd: false } },
   { el: document.getElementById('m-ellipse')!, brush: { mode: 'ellipse', arrowEnd: false } },
+  { el: document.getElementById('m-eraser')!, brush: { mode: 'eraser', arrowEnd: false } },
 ]
 modes.forEach(({ el, brush }) => {
   el.addEventListener('click', () => {
